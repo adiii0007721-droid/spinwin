@@ -1,59 +1,91 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>c0in.man — Spin & Win</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Spin & Win Premium</title>
+<style>
+body { margin:0; padding:0; background:#d9e9ff; font-family:sans-serif; text-align:center; }
+.header { background:#1e4eff; color:white; padding:20px; font-size:26px; font-weight:bold; }
+.btn {
+ padding:15px 25px; background:#ff2d96; color:white; border-radius:14px;
+ font-size:22px; text-decoration:none; margin-top:20px; display:inline-block;
+}
+#wheel {
+ width:260px; height:260px; border-radius:50%; border:10px solid #333;
+ margin:30px auto; background:conic-gradient(red,orange,yellow,green,cyan,blue,violet);
+ transition:4s;
+}
+#pointer {
+ width:0; height:0; border-left:25px solid transparent; border-right:25px solid transparent;
+ border-bottom:40px solid #333; margin:auto;
+}
+#result { font-size:24px; margin-top:20px; font-weight:bold; color:#00378d; }
+#share { margin-top:30px; }
+.sharebtn {
+ padding:12px 20px; background:#00c853; color:white; border-radius:10px;
+ text-decoration:none; font-size:18px; margin:10px; display:inline-block;
+}
+</style>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <h1>🎉 Spin & Win — 3 Free Spins!</h1>
-      <p class="subtitle">Follow <strong>@c0in.man</strong> on Instagram, enter your IG username, और spin करें — 3 attempts per account.</p>
-    </header>
 
-    <section class="panel">
-      <label for="iguser">Instagram username (without @)</label>
-      <input id="iguser" placeholder="e.g. c0in.man_fan" autocomplete="off">
-      <div class="follow-note">कृपया पहले <strong>@c0in.man</strong> को follow कर लें — बड़े इनाम के लिए verification आवश्यक होगा.</div>
+<div class="header">🎁 स्पिन करके इनाम जीतें</div>
 
-      <div id="wheelwrap">
-        <canvas id="wheel" width="500" height="500"></canvas>
-        <button id="spinBtn">SPIN</button>
-      </div>
+<a class="btn" href="https://www.instagram.com/c0in.man/" target="_blank">Instagram Follow करें</a>
 
-      <div class="attempts">Attempts left: <span id="attemptsLeft">3</span></div>
+<div id="pointer"></div>
+<div id="wheel"></div>
 
-      <div id="result" class="result"></div>
+<button class="btn" onclick="spin()">SPIN</button>
 
-      <div id="claimBox" class="claim hidden">
-        <h3>Claim prize</h3>
-        <p id="prizeText"></p>
-        <p>Prize verification required for high-value rewards (iPhone / ₹1000). Please provide your IG profile link and screenshot when claiming.</p>
-        <label for="email">Email (optional)</label>
-        <input id="email" placeholder="example@gmail.com">
-        <button id="claimBtn">Submit Claim</button>
-        <div id="claimStatus"></div>
-      </div>
+<p id="result"></p>
 
-      <hr>
-      <details>
-        <summary>Rules & Trust</summary>
-        <ol>
-          <li>प्रत्येक account को 3 attempts मिलते हैं (same browser/device tracked via username + localStorage).</li>
-          <li>High-value prizes require manual verification that you follow <strong>@c0in.man</strong>.</li>
-          <li>हम कभी भी OTP/Password/Payment नहीं मांगेंगे।</li>
-          <li>Winners announced publicly on our Instagram and landing page.</li>
-        </ol>
-      </details>
+<div id="share">
+<a class="sharebtn" href="#" onclick="shareWhatsApp()">WhatsApp Share</a>
+<a class="sharebtn" href="#" onclick="shareTelegram()">Telegram Share</a>
+</div>
 
-      <footer>
-        <small>Contact: team@c0in.man (example). This is a self-hosted static demo. To receive real claims you must configure a webhook (instructions included).</small>
-      </footer>
-    </section>
-  </main>
+<script>
+function spin(){
+  const wheel=document.getElementById("wheel");
+  const result=document.getElementById("result");
 
-  <script src="script.js"></script>
+  const rot=Math.floor(Math.random()*360)+1440;
+  wheel.style.transform="rotate("+rot+"deg)";
+
+  setTimeout(()=>{ result.textContent="🎉 बधाई! आपका स्पिन पूरा हुआ।"; confetti(); },4200);
+}
+
+function shareWhatsApp(){
+  window.open("https://wa.me/?text=इस वेबसाइट पर स्पिन करके इनाम जीतें: "+window.location.href);
+}
+
+function shareTelegram(){
+  window.open("https://t.me/share/url?url="+window.location.href);
+}
+
+function confetti(){
+  for(let i=0;i<30;i++){
+    const d=document.createElement("div");
+    d.style.position="fixed";
+    d.style.width="10px";
+    d.style.height="10px";
+    d.style.background="hsl("+Math.random()*360+",100%,50%)";
+    d.style.top="-10px";
+    d.style.left=Math.random()*100+"vw";
+    d.style.opacity="0.9";
+    d.style.animation="fall 3s linear forwards";
+    document.body.appendChild(d);
+  }
+}
+
+</script>
+
+<style>
+@keyframes fall {
+  to { transform:translateY(100vh); opacity:0; }
+}
+</style>
+
 </body>
 </html>
