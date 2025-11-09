@@ -1,0 +1,30 @@
+// Google Apps Script: doPost to receive claim JSON and append to Google Sheet
+// 1) Create a new Google Sheet. Note the sheet name (default "Sheet1").
+// 2) Open Extensions -> Apps Script, paste this code and save.
+// 3) Deploy -> New deployment -> Web app -> Execute as: Me, Who has access: Anyone
+// 4) Use the Web App URL as the webhook in script.js (replace placeholder).
+
+const SHEET_NAME = "Sheet1";
+
+function doPost(e) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    if (!sheet) {
+      return ContentService.createTextOutput(JSON.stringify({status:"error", message:"Sheet not found"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    const data = JSON.parse(e.postData.contents);
+    const row = [
+      new Date(),
+      data.username || "",
+      data.prize || "",
+      data.email || "",
+      data.timestamp || "",
+      JSON.stringify(data || {})
+    ];
+    sheet.appendRow(row);
+    return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({status:"error", message: err.message})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
